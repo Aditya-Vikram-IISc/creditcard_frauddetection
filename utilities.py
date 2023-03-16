@@ -1,5 +1,6 @@
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import StratifiedKFold
+import itertools
 
 def splitdf_train_test(df, statify_col = "Class", test_size = 0.2, random_state = 0):
     """
@@ -17,6 +18,7 @@ def splitdf_train_test(df, statify_col = "Class", test_size = 0.2, random_state 
     df_train = df_train.sample(frac=1).reset_index(drop=True)
     df_test = df_test.sample(frac=1).reset_index(drop=True)
     return df_train, df_test
+
 
 def stratify_kfold(df, statify_col= "Class", k=5):
     """
@@ -43,3 +45,13 @@ def stratify_kfold(df, statify_col= "Class", k=5):
 
     return df
 
+
+def param_combinations(param_dict):
+    """
+    Arguments:
+    param_dict - input dict containing various model parameters
+    Return: Returns a list of different param combination for the input model
+    """
+    keys, values = zip(*param_dict.items())
+    all_combinations = [dict(zip(keys,v))  for v in itertools.product(*values)]
+    return all_combinations
