@@ -1,5 +1,7 @@
-class training_parameters:
+class training_hyperparameters:
     kfold = 5
+    undersample_technique = "random"
+    oversample_technique = "random"
 
 
 

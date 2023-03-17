@@ -1,6 +1,8 @@
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import StratifiedKFold
 import itertools
+import pandas as pd
+
 
 def splitdf_train_test(df, statify_col = "Class", test_size = 0.2, random_state = 0):
     """
@@ -55,3 +57,34 @@ def param_combinations(param_dict):
     keys, values = zip(*param_dict.items())
     all_combinations = [dict(zip(keys,v))  for v in itertools.product(*values)]
     return all_combinations
+
+
+def random_binary_undersample(df, category_col="Class", random_state=121):
+    min_size = min(df[category_col].value_counts()[0], df[category_col].value_counts()[1])
+
+    # Get balanced sub-dfs for the two classes
+    df0 = df[df[category_col] == 0].sample(n=min_size, random_state=random_state)
+    df1 = df[df[category_col] == 1].sample(n=min_size, random_state=random_state)
+
+    # Concat the two dfs
+    bal_df = pd.concat([df0, df1], axis=0).sample(frac=1).reset_index(drop=True)
+    return bal_df
+
+
+def random_binary_oversample(df, category_col="Class", random_state=121):
+    max_size = max(df[category_col].value_counts()[0], df[category_col].value_counts()[1])
+
+    # Get balanced sub-dfs for the two classes
+    if df[category_col].value_counts()[0] == max_size:
+        df0 = df[df[category_col] == 0].sample(n=max_size, random_state=random_state)
+    else:
+        df0 = df[df[category_col] == 0].sample(n=max_size, random_state=random_state, replace=True)
+
+    if df[category_col].value_counts()[1] == max_size:
+        df1 = df[df[category_col] == 1].sample(n=max_size, random_state=random_state)
+    else:
+        df1 = df[df[category_col] == 1].sample(n=max_size, random_state=random_state, replace=True)
+
+    # Concat the two dfs
+    bal_df = pd.concat([df0, df1], axis=0).sample(frac=1).reset_index(drop=True)
+    return bal_df
