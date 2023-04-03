@@ -2,6 +2,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import StratifiedKFold
 import itertools
 import pandas as pd
+import matplotlib.pyplot as plt
 
 
 def splitdf_train_test(df, statify_col = "Class", test_size = 0.2, random_state = 0):
@@ -88,3 +89,46 @@ def random_binary_oversample(df, category_col="Class", random_state=121):
     # Concat the two dfs
     bal_df = pd.concat([df0, df1], axis=0).sample(frac=1).reset_index(drop=True)
     return bal_df
+
+
+def model_output_plot(train_pred_prob, precisionT, recallT, thresholdsT, \
+                      valid_pred_prob, precisionV, recallV, thresholdsV, title, path, tr_auprc = 0.0 , val_auprc = 0.0):
+
+    # Get the 2X3 axes for Training and Validation Plots
+    fig, ((ax0, ax1, ax2), (ax3, ax4, ax5)) = plt.subplots(nrows=2, ncols=3, figsize=(12, 10))
+    plt.subplots_adjust(hspace=0.4, wspace=0.3)
+    plt.suptitle(title)
+
+    # Training - AUPRC
+    ax0.plot(recallT, precisionT)
+    ax0.set_title(f"Training: AUPRC {tr_auprc:.4f}")
+    ax0.set_xlabel("recall")
+    ax0.set_ylabel("precision")
+
+    # Training - Precision-Recall Vs Thresholds
+    ax1.plot(thresholdsT, recallT)
+    ax1.plot(thresholdsT, precisionT)
+    ax1.set_title("Training: PR Vs Thresholds")
+    ax1.set_xlabel("thresholds")
+
+    # Training - Predicted Probabilities Distribution
+    ax2.hist(train_pred_prob, bins=50)
+    ax2.set_title("Training: Predicted Probability Distribution")
+
+    # Validation - AUPRC
+    ax3.plot(recallV, precisionV)
+    ax3.set_title(f"Validation: AUPRC {val_auprc:.4f}")
+    ax3.set_xlabel("recall")
+    ax3.set_ylabel("precision")
+
+    # Training - Precision-Recall Vs Thresholds
+    ax4.plot(thresholdsV, recallV)
+    ax4.plot(thresholdsV, precisionV)
+    ax4.set_title("Validation: PR Vs Thresholds")
+    ax4.set_xlabel("thresholds")
+
+    # Training - Predicted Probabilities Distribution
+    ax5.hist(valid_pred_prob, bins=50)
+    ax5.set_title("Validation: Predicted Probability Distribution")
+
+    plt.savefig(path)
