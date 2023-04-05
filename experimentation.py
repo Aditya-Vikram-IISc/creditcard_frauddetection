@@ -21,17 +21,17 @@ stratified_traindf = stratify_kfold(train_df, statify_col= "Class", k=5)
 
 ### train the model
 
-# #1. Normal Training
-# normal_training(stratified_traindf, ml_model = LogisticRegression, kfolds=5, param_grid= param_grid_logregression)
+#1. Normal Training
+normal_training(stratified_traindf, ml_model = RandomForestClassifier, kfolds=5, param_grid= param_grid_rf)
 
 
 # #2. Undersampling
-undersample_training(df= stratified_traindf, ml_model = LogisticRegression,\
-                    param_grid = param_grid_logregression, kfolds = training_hyperparams.kfold, \
+undersample_training(df= stratified_traindf, ml_model = RandomForestClassifier,\
+                    param_grid = param_grid_rf, kfolds = training_hyperparams.kfold, \
                     undersample_technique = training_hyperparams.undersample_technique)
 
-# # ##3. Oversampling
-# oversample_training(df= stratified_traindf, ml_model = LogisticRegression, \
-#                     param_grid = param_grid_logregression, kfolds = training_hyperparams.kfold, \
-#                     oversample_technique = training_hyperparams.oversample_technique)
+##3. Oversampling
+oversample_training(df= stratified_traindf, ml_model = RandomForestClassifier, \
+                    param_grid = param_grid_rf, kfolds = training_hyperparams.kfold, \
+                    oversample_technique = training_hyperparams.oversample_technique)
 
