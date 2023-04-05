@@ -37,12 +37,28 @@ The results of the experiments are summarized below:
 | RF         | {'n_estimators': 100}                        | Random Oversampling      |1 ± 0|1 ± 0|1 ± 0|0.792 ± 0.044|0.948 ± 0.012|0.861 ± 0.048|
 | RF         | {'n_estimators': 1000}                       | Random Oversampling      |1 ± 0|1 ± 0|1 ± 0|0.79 ± 0.045|0.943 ± 0.014|0.865 ± 0.047|
 
-The final model selected is RF  {'n_estimators': 1000} .
+The final model selected is RF  {'n_estimators': 100} + Oversampling . Though performance of RF  {'n_estimators': 1000} is slightly better 
+in terms of Validation AUPRC but training time is significantly higher.
+
+The training report of RF  {'n_estimators': 100}  + Oversampling is as below:
+![rf_experimentaion_results](figures_and_charts/RandomForestClassifier_normal_100_-1_.png)
+
 
 ### Results:
+Results obtained with RF  {'n_estimators': 100} + Random Oversampling. Note only training dataset is oversampled, 
+test dataset is left as it is.
 
-
+Training Recall: 1.0
+Training Precision: 0.9999048367743804
+Training AUPRC: 1.0
+Test Recall: 0.8108108108108109
+Test Precision: 0.821917808219178
+Test AUPRC: 0.8149799256265685
+ 
 
 ### Things to do:
+Decent results are obtained. Probably will perform the below mentioned exercises to push both recall and
+precision to 0.90+
+
 1. Feature engineering
 2. Probabiility calibration
